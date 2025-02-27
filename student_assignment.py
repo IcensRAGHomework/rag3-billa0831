@@ -36,7 +36,6 @@ def generate_hw01():
         raise ValueError("CSV 缺少必要欄位！請確認 CSV 欄位名稱是否正確。")
     city_pattern = re.compile(r"^(.*?[市縣])")
     town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉鎮市])")
-    town_pattern2 = re.compile(r"^(.*?[市縣].*?[里])")
     documents = df["HostWords"].tolist()
     metadata_list = []
     ids = []
@@ -50,7 +49,8 @@ def generate_hw01():
         if re.match(town_pattern, row["Address"]) is not None:
             town_str = re.match(town_pattern, row["Address"]).group().split(city_str)[1]
         else:
-            town_str = re.match(town_pattern2, row["Address"]).group().split(city_str)[1]
+            town_str = city_str
+            city_str = city_str.replace("市", "縣")
             print(index)
         
         metadata = {
