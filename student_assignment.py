@@ -1,6 +1,7 @@
 import datetime
 import pprint
 import time
+from langchain.docstore.document import Document
 import chromadb
 import traceback
 import pandas as pd
@@ -33,7 +34,7 @@ def generate_hw01():
     required_columns={"ID", "Name", "Type", "Address", "Tel", "CreateDate", "HostWords"}
     if not required_columns.issubset(df.columns):
         raise ValueError("CSV 缺少必要欄位！請確認 CSV 欄位名稱是否正確。")
-    print(df["HostWords"])
+    # print(df["HostWords"])
     city_pattern = re.compile(r"^(.*?[市縣])")
     town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉鎮市])")
     documents = df["HostWords"].tolist()
@@ -49,11 +50,10 @@ def generate_hw01():
         print(city_str)
 
         if re.match(town_pattern, row["Address"]) is not None:
-            print(re.match(town_pattern, row["Address"]).group())
+            # print(re.match(town_pattern, row["Address"]).group())
             town_str = re.match(town_pattern, row["Address"]).group().split(city_str)[1]
-        else:
-            town_str = ""
-        print(town_str)
+        
+        print(str(index) + " "+town_str)
         
         metadata = {
             "file_name": file_name,
@@ -61,12 +61,11 @@ def generate_hw01():
             "type": row["Type"],
             "address": row["Address"],
             "tel": row["Tel"],
-            # "city": city_pattern.match(row["Address"]).group(0),
             "city": city_str,
             "town": town_str,
-            # "town": row["town"],
             "date": create_timestamp
         }
+
         metadata_list.append(metadata)
         ids.append(row["ID"])  # 以 index 作為 ID
     # 將數據存入 ChromaDB
@@ -75,7 +74,8 @@ def generate_hw01():
         documents=documents,
         metadatas=metadata_list
     )
-    print(collection)
+    
+    print(collection.metadata)
     return collection
     # pass
     
@@ -103,5 +103,5 @@ def demo(question):
     return collection
 
 
-generate_hw01()
+print(generate_hw01())
 print("finish")
