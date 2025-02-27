@@ -34,9 +34,8 @@ def generate_hw01():
     required_columns={"ID", "Name", "Type", "Address", "Tel", "CreateDate", "HostWords"}
     if not required_columns.issubset(df.columns):
         raise ValueError("CSV 缺少必要欄位！請確認 CSV 欄位名稱是否正確。")
-    # print(df["HostWords"])
     city_pattern = re.compile(r"^(.*?[市縣])")
-    town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉鎮市])")
+    town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉鎮市里])")
     documents = df["HostWords"].tolist()
     metadata_list = []
     ids = []
@@ -45,15 +44,10 @@ def generate_hw01():
             create_timestamp = int(time.mktime(pd.to_datetime(row["CreateDate"]).timetuple()))
         except:
             create_timestamp = int(time.time())  # 若日期轉換失敗，則使用當前時間
-        # address_split_list = re.split(city_pattern, row["Address"])
         city_str = re.match(city_pattern, row["Address"]).group()
-        print(city_str)
 
         if re.match(town_pattern, row["Address"]) is not None:
-            # print(re.match(town_pattern, row["Address"]).group())
             town_str = re.match(town_pattern, row["Address"]).group().split(city_str)[1]
-        
-        print(str(index) + " "+town_str)
         
         metadata = {
             "file_name": file_name,
@@ -74,8 +68,6 @@ def generate_hw01():
         documents=documents,
         metadatas=metadata_list
     )
-    
-    print(collection.metadata)
     return collection
     # pass
     
