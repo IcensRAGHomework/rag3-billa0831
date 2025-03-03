@@ -36,10 +36,7 @@ def generate_hw01():
     metadata_list = []
     ids = []
     for index, row in df.iterrows():
-        try:
-            create_timestamp = int(time.mktime(pd.to_datetime(row["CreateDate"]).timetuple()))
-        except:
-            create_timestamp = int(time.time())  # 若日期轉換失敗，則使用當前時間
+        create_timestamp = int(datetime.strptime(row["CreateDate"], "%Y-%m-%d").timestamp())
         city_str = re.match(city_pattern, row["Address"]).group()
 
         if re.match(town_pattern, row["Address"]) is not None:
