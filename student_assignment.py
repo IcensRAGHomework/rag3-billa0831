@@ -1,5 +1,4 @@
 from datetime import datetime
-import re
 import chromadb
 import pandas as pd
 from chromadb.utils import embedding_functions
@@ -29,9 +28,9 @@ def generate_hw01():
     required_columns={"ID", "Name", "Type", "Address", "Tel", "CreateDate", "HostWords"}
     if not required_columns.issubset(df.columns):
         raise ValueError("CSV 缺少必要欄位！請確認 CSV 欄位名稱是否正確。")
-    city_pattern = re.compile(r"^(.*?[市縣])")
-    town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉市])")
-    town_pattern2 = re.compile(r"^(.*?[市縣].*?[鎮])")
+    # city_pattern = re.compile(r"^(.*?[市縣])")
+    # town_pattern = re.compile(r"^(.*?[市縣].*?[區鄉市])")
+    # town_pattern2 = re.compile(r"^(.*?[市縣].*?[鎮])")
     documents = df["HostWords"].tolist()
     metadata_list = []
     ids = []
