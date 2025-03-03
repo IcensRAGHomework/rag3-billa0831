@@ -28,8 +28,22 @@ collection = chroma_client.get_or_create_collection(
     embedding_function=openai_ef
 )
 file_name = "COA_OpenData.csv"
-
 def generate_hw01():
+#     chroma_client = chromadb.PersistentClient(path=dbpath)
+#     openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+#         api_key=gpt_emb_config['api_key'],
+#         api_base=gpt_emb_config['api_base'],
+#         api_type=gpt_emb_config['openai_type'],
+#         api_version=gpt_emb_config['api_version'],
+#         deployment_id=gpt_emb_config['deployment_name']
+#     )
+#     collection = chroma_client.get_or_create_collection(
+#         name="TRAVEL",
+#         metadata={"hnsw:space": "cosine"},
+#         embedding_function=openai_ef
+#     )
+#     return collection
+# def generate_hw01_rr():
     df = pd.read_csv(file_name)
     required_columns={"ID", "Name", "Type", "Address", "Tel", "CreateDate", "HostWords"}
     if not required_columns.issubset(df.columns):
@@ -54,7 +68,6 @@ def generate_hw01():
         else:
             town_str = city_str
             city_str = city_str.replace("市", "縣")
-            print(index)
         
         metadata = {
             "file_name": file_name,
