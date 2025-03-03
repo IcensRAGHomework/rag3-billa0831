@@ -1,11 +1,7 @@
 from datetime import datetime
-import pprint
-import time
 from langchain.docstore.document import Document
 import chromadb
-import traceback
 import pandas as pd
-import re
 from chromadb.utils import embedding_functions
 
 from model_configurations import get_model_configuration
@@ -152,7 +148,3 @@ def demo(question):
     )
     
     return collection
-
-
-print(generate_hw01())
-print("finish")
