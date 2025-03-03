@@ -9,39 +9,39 @@ gpt_emb_version = 'text-embedding-ada-002'
 gpt_emb_config = get_model_configuration(gpt_emb_version)
 
 dbpath = "./"
-chroma_client = chromadb.PersistentClient(path=dbpath)
-openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-    api_key = gpt_emb_config['api_key'],
-    api_base = gpt_emb_config['api_base'],
-    api_type = gpt_emb_config['openai_type'],
-    api_version = gpt_emb_config['api_version'],
-    deployment_id = gpt_emb_config['deployment_name']
-)
-collection = chroma_client.get_or_create_collection(
-    name="TRAVEL",
-    metadata={"hnsw:space": "cosine"},
-    embedding_function=openai_ef
-)
-file_name = "COA_OpenData.csv"
+# chroma_client = chromadb.PersistentClient(path=dbpath)
+# openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+#     api_key = gpt_emb_config['api_key'],
+#     api_base = gpt_emb_config['api_base'],
+#     api_type = gpt_emb_config['openai_type'],
+#     api_version = gpt_emb_config['api_version'],
+#     deployment_id = gpt_emb_config['deployment_name']
+# )
+# collection = chroma_client.get_or_create_collection(
+#     name="TRAVEL",
+#     metadata={"hnsw:space": "cosine"},
+#     embedding_function=openai_ef
+# )
+# file_name = "COA_OpenData.csv"
 def generate_hw01():
-#     chroma_client = chromadb.PersistentClient(path=dbpath)
-#     openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-#         api_key = gpt_emb_config['api_key'],
-#         api_base = gpt_emb_config['api_base'],
-#         api_type = gpt_emb_config['openai_type'],
-#         api_version = gpt_emb_config['api_version'],
-#         deployment_id = gpt_emb_config['deployment_name']
-#     )
-#     collection = chroma_client.get_or_create_collection(
-#         name="TRAVEL",
-#         metadata={"hnsw:space": "cosine"},
-#         embedding_function=openai_ef
-#     )
+    chroma_client = chromadb.PersistentClient(path=dbpath)
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+        api_key = gpt_emb_config['api_key'],
+        api_base = gpt_emb_config['api_base'],
+        api_type = gpt_emb_config['openai_type'],
+        api_version = gpt_emb_config['api_version'],
+        deployment_id = gpt_emb_config['deployment_name']
+    )
+    collection = chroma_client.get_or_create_collection(
+        name="TRAVEL",
+        metadata={"hnsw:space": "cosine"},
+        embedding_function=openai_ef
+    )
     
-#     if collection.count() != 0:
-#         return collection
-#     # 讀取 CSV 檔案
-#     df = pd.read_csv("COA_OpenData.csv")
+    if collection.count() != 0:
+        return collection
+    # 讀取 CSV 檔案
+    df = pd.read_csv("COA_OpenData.csv")
 
 #     # 將資料轉換為 ChromaDB 可以接受的格式
 #     documents = []
@@ -78,7 +78,7 @@ def generate_hw01():
     
 #     return collection
 # # def generate_hw01_rr():
-    df = pd.read_csv(file_name)
+    # df = pd.read_csv(file_name)
     required_columns={"ID", "Name", "Type", "Address", "Tel", "CreateDate", "HostWords"}
     if not required_columns.issubset(df.columns):
         raise ValueError("CSV 缺少必要欄位！請確認 CSV 欄位名稱是否正確。")
@@ -89,10 +89,10 @@ def generate_hw01():
     metadata_list = []
     ids = []
     for index, row in df.iterrows():
-        try:
-            create_timestamp = int(time.mktime(pd.to_datetime(row["CreateDate"]).timetuple()))
-        except:
-            create_timestamp = int(time.time())  # 若日期轉換失敗，則使用當前時間
+        # try:
+        create_timestamp = int(datetime.strptime(row["CreateDate"], "%Y-%m-%d").timestamp())
+        # except:
+        #     create_timestamp = int(time.time())  # 若日期轉換失敗，則使用當前時間
         city_str = re.match(city_pattern, row["Address"]).group()
 
         if re.match(town_pattern, row["Address"]) is not None:
