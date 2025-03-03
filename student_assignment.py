@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 import chromadb
 import pandas as pd
 from chromadb.utils import embedding_functions
