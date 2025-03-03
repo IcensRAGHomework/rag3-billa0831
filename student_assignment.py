@@ -81,7 +81,7 @@ def generate_hw01():
         }
 
         metadata_list.append(metadata)
-        ids.append(row["ID"])  # 以 index 作為 ID
+        ids.append(str(index))  # 以 index 作為 ID
     # 將數據存入 ChromaDB
     collection.add(
         ids=ids,
