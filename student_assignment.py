@@ -37,15 +37,15 @@ def generate_hw01():
     ids = []
     for index, row in df.iterrows():
         create_timestamp = int(datetime.strptime(row["CreateDate"], "%Y-%m-%d").timestamp())
-        city_str = re.match(city_pattern, row["Address"]).group()
+        # city_str = re.match(city_pattern, row["Address"]).group()
 
-        if re.match(town_pattern, row["Address"]) is not None:
-            town_str = re.match(town_pattern, row["Address"]).group().split(city_str)[1]
-        elif re.match(town_pattern2, row["Address"]) is not None:
-            town_str = re.match(town_pattern2, row["Address"]).group().split(city_str)[1]
-        else:
-            town_str = city_str
-            city_str = city_str.replace("市", "縣")
+        # if re.match(town_pattern, row["Address"]) is not None:
+        #     town_str = re.match(town_pattern, row["Address"]).group().split(city_str)[1]
+        # elif re.match(town_pattern2, row["Address"]) is not None:
+        #     town_str = re.match(town_pattern2, row["Address"]).group().split(city_str)[1]
+        # else:
+        #     town_str = city_str
+        #     city_str = city_str.replace("市", "縣")
         
         metadata = {
             "file_name": file_name,
@@ -53,8 +53,8 @@ def generate_hw01():
             "type": row["Type"],
             "address": row["Address"],
             "tel": row["Tel"],
-            "city": city_str,
-            "town": town_str,
+            "city": row["City"],
+            "town": row["Town"],
             "date": create_timestamp
         }
 
