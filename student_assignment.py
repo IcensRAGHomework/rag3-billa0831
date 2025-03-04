@@ -193,7 +193,7 @@ def generate_hw03(question, store_name, new_store_name, city, store_type):
     results = collection.query(
         query_texts=[question],
         n_results=10,
-        where=where_clause if where_clause else None
+        where=where_clause
     )
 
     # 處理查詢結果
@@ -201,9 +201,12 @@ def generate_hw03(question, store_name, new_store_name, city, store_type):
     if results['distances'] and results['metadatas']:
         for distance, metadata in zip(results['distances'][0], results['metadatas'][0]):
             similarity = 1 - (distance / 2)
-            if similarity >= 0.80:
+            if similarity >= 0.90:
+                print(similarity)
+
                 # 如果有 new_store_name，使用它代替原名稱
                 display_name = metadata.get('new_store_name', metadata['name'])
+                print(display_name)
                 store_list.append({
                     'name': display_name,
                     'similarity': similarity
